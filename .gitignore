@@ -1,0 +1,23 @@
+# Executables
+*
+!*/
+!*.*
+*.exe
+
+# Code::Blocks
+obj/
+*.layout
+*.depend
+*.cbp
+
+# ILY vscode
+.vscode/
+*.code-workspace
+
+# Builds and binaries
+build/
+obj/
+bin/
+
+# Local files
+src/secrets.hpp
