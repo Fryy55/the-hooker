@@ -6,7 +6,7 @@ using namespace dpp;
 
 
 struct {
-	embed rules = embed()
+	embed const rules = embed()
 				.set_color(colors::purple_amethyst)
 				.set_title("Server Rules")
 				.set_description(
@@ -38,7 +38,7 @@ struct {
 					"> If a staff member tells you to stop and bring it to DMs, listen to them. Doing otherwise can result in a warn.\n"
 					"\n"
 					"10. Do not send server invites within the server.\n"
-					"> Sending server invites is not allowed, _even in <#&1351956762428837918>_.\n"
+					"> Sending server invites is not allowed, _even in <#1351956762428837918>_.\n"
 					"\n"
 					"11. Use common sense.\n"
 					"> Just because certain types of conduct are not covered in these rules, doesn't mean that you cannot get warned for them.\n"
@@ -49,7 +49,7 @@ struct {
 					.set_text("This server's personality and rules were almost entirely stolen from TSL, I am not sorry.")
 				);
 
-	std::vector<embed> info = {
+	std::vector<embed> const info = {
 		embed()
 		.set_color(colors::purple_amethyst)
 		.set_title("Roles Information")
@@ -61,25 +61,25 @@ struct {
 			"<@&1351991165603545249> - People in charge of the whole server. Each gets a personalized role.\n"
 			"<@&1351991422550802533> - Trusted users who keep the server organized and safe.\n"
 			"<@&1351937107060326451> - Programmers that have access to special hidden chats for easier cooperative development.",
-			true
+			false
 		)
 		.add_field(
 			"Leveling Roles",
 			"<@&1351944696640962581> - reaching this level gives you the <@&1351904191194599544> role.\n"
 			"<@&1351944961830031412>\n"
 			"<@&1351945155883696221>",
-			true
+			false
 		),
 		embed()
 		.set_color(colors::purple_amethyst)
 		.set_title("Staff list")
 		.add_field(
-			"Owners",
+			":crown: Owners",
 			"Fryy_55 [she/her]",
 			true
 		)
 		.add_field(
-			"Moderators",
+			":tools: Moderators",
 			"None",
 			true
 		),
@@ -87,7 +87,7 @@ struct {
 			.set_color(colors::purple_amethyst)
 			.set_title("Extras")
 			.set_description(
-				"**Invite Link**\n"
+				":link: **Invite Link**\n"
 				"https://discord.com/invite/4vqtjfdhTk"
 			)
 			.set_footer(
@@ -95,4 +95,9 @@ struct {
 				.set_text("yeah idk what to add here ¯\\_(ツ)_/¯")
 			)
 	};
-} Messages;
+	std::vector<snowflake> const infoIDs = {
+		1365011275834327111,
+		1365011281761009674,
+		1365011287599485031
+	};
+} Values;
