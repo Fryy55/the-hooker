@@ -25,6 +25,8 @@ int main()
 
 			bot.global_bulk_command_create(commands);
 		}
+
+		bot.set_presence(presence(ps_online, at_competing, "being the worst bot :thumbsup:"));
 	});
 
 	bot.on_slashcommand([&bot](slashcommand_t const& event) -> task<void> {
