@@ -6,8 +6,7 @@
 using namespace dpp;
 
 
-int main()
-{
+int main() {
 	assert(Values.info.size() == Values.infoIDs.size());
 
 	cluster bot(BOT_TOKEN);
@@ -43,9 +42,10 @@ int main()
 					year_month_day(floor<std::chrono::days>(system_clock::now())) + months(1)
 				)
 			);
-			tm restartDateTimeTM = *localtime(&restartDateTimeType);
+			tm restartDateTM;
+			localtime_s(&restartDateTM, &restartDateTimeType);
 			event.reply(message(
-				std::string("Badge extended, next refresh needed until approximately ") + Values.months[restartDateTimeTM.tm_mon] + " " + std::to_string(restartDateTimeTM.tm_mday) + " " + std::to_string(1900 + restartDateTimeTM.tm_year)
+				std::string("Badge extended, next refresh needed until approximately `") + Values.months[restartDateTM.tm_mon] + " " + std::to_string(restartDateTM.tm_mday) + " " + std::to_string(1900 + restartDateTM.tm_year) + "`"
 			).set_flags(m_ephemeral));
 		}
 		else if (commandNameHash == hasher("rules-init")) {
