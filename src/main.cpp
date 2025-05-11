@@ -1,4 +1,5 @@
 #include <dpp/dpp.h>
+#include <chrono>
 #include "values.hpp"
 #include "secrets.hpp"
 
@@ -15,6 +16,7 @@ int main()
 	bot.on_ready([&bot](ready_t const& event) {
 		if (run_once<struct CmdRegister>()) {
 			std::vector<slashcommand> commands {
+				{ "badge", "the infinite dev badge glitch", bot.me.id },
 				{ "rules-init", "Prints out the rules", bot.me.id },
 				{ "info-init", "Prints out the server info", bot.me.id },
 				{ "rules", "Updates the rules", bot.me.id },
@@ -33,7 +35,20 @@ int main()
 		auto hasher = std::hash<std::string>();
 		auto const commandNameHash = hasher(event.command.get_command_name());
 
-		if (commandNameHash == hasher("rules-init")) {
+		if (commandNameHash == hasher("badge")) {
+			using namespace std::chrono;
+
+			time_t restartDateTimeType = system_clock::to_time_t(
+				sys_days(
+					year_month_day(floor<std::chrono::days>(system_clock::now())) + months(1)
+				)
+			);
+			tm restartDateTimeTM = *localtime(&restartDateTimeType);
+			event.reply(message(
+				std::string("Badge extended, next refresh needed until approximately ") + Values.months[restartDateTimeTM.tm_mon] + " " + std::to_string(restartDateTimeTM.tm_mday) + " " + std::to_string(1900 + restartDateTimeTM.tm_year)
+			).set_flags(m_ephemeral));
+		}
+		else if (commandNameHash == hasher("rules-init")) {
 			bot.message_create({ event.command.channel_id, Values.rules });
 			event.reply(message("Rules published.").set_flags(m_ephemeral));
 		} else if (commandNameHash == hasher("info-init")) {

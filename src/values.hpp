@@ -25,22 +25,25 @@ struct {
 					"5. Do not support/engage in conduct that supports biastophilia, necrophilia, pedophilia, zoophilia.\n"
 					"> Doing so, even outside the server, will result in a ban without chance of appeal.\n"
 					"\n"
-					"6. Do not send spam.\n"
+					"6. Do not discuss anything that involves the consumption or promotion of harmful substances, such as drugs, alcohol and cigarettes (even if it is legal for you to).\n"
+					"> As an exception, discussions about dealing with the negative side effects of these substances are permissible.\n"
+					"\n"
+					"7. Do not send spam.\n"
 					"> This includes sending messages, images, videos, etc.in a way that clogs up channels and annoys server members.\n"
 					"\n"
-					"7. Send volume warnings for videos that are loud.\n"
+					"8. Send volume warnings for videos that are loud.\n"
 					"> Doing so intentionally with deliberate aim to cause panic can result in a warn, while accidental ones can be verbally warned.\n"
 					"\n"
-					"8. Use channels for their intended purposes.\n"
+					"9. Use channels for their intended purposes.\n"
 					"> Read the channel name, description, or check for any pinned messages to find the purpose of the channel, as well as any channel-specific rules. These rules are equally as enforceable as server rules.\n"
 					"\n"
-					"9. Keep personal drama out of the server.\n"
+					"10. Keep personal drama out of the server.\n"
 					"> If a staff member tells you to stop and bring it to DMs, listen to them. Doing otherwise can result in a warn.\n"
 					"\n"
-					"10. Do not send server invites within the server.\n"
+					"11. Do not send server invites within the server.\n"
 					"> Sending server invites is not allowed, _even in <#1351956762428837918>_.\n"
 					"\n"
-					"11. Use common sense.\n"
+					"12. Use common sense.\n"
 					"> Just because certain types of conduct are not covered in these rules, doesn't mean that you cannot get warned for them.\n"
 					"\n"
 				)
@@ -99,5 +102,19 @@ struct {
 		1365011275834327111,
 		1365011281761009674,
 		1365011287599485031
+	};
+	char const* months[12] = {
+		"Jan",
+		"Feb",
+		"Mar",
+		"Apr",
+		"May",
+		"Jun",
+		"Jul",
+		"Aug",
+		"Sep",
+		"Oct",
+		"Nov",
+		"Dec"
 	};
 } Values;
