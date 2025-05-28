@@ -10,7 +10,47 @@ int main() {
 	assert(Values.info.size() == Values.infoIDs.size());
 
 	cluster bot(BOT_TOKEN);
-	bot.on_log(utility::cout_logger());
+	std::ofstream O("C:/Users/User/Desktop/debug_hooker.txt", std::ofstream::out | std::ofstream::trunc);
+	O.close();
+
+	bot.on_log([](log_t const& log) {
+		using namespace std::chrono;
+
+		std::ofstream O("C:/Users/User/Desktop/debug_hooker.txt", std::ofstream::app);
+
+		char const* severity;
+		switch (log.severity) {
+			case loglevel::ll_debug:
+				severity = "DEBUG: ";
+				break;
+			case loglevel::ll_info:
+				severity = "INFO: ";
+				break;
+			case loglevel::ll_warning:
+				severity = "WARNING: ";
+				break;
+			case loglevel::ll_error:
+				severity = "ERROR: ";
+				break;
+			case loglevel::ll_critical:
+				severity = "CRITICAL: ";
+				break;
+			default:
+				return;
+		}
+
+		auto now_tt = system_clock::to_time_t(system_clock::now());
+		tm now_tm;
+		localtime_s(&now_tm, &now_tt);
+
+		auto fmt = "%a %b %d %I:%M:%S %p %Y";
+
+		O << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
+		O.close();
+		std::cout << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
+
+		return;
+	});
 
 	bot.on_ready([&bot](ready_t const& event) {
 		if (run_once<struct CmdRegister>()) {
