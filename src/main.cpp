@@ -1,56 +1,16 @@
 #include <dpp/dpp.h>
-#include <chrono>
 #include "values.hpp"
 #include "secrets.hpp"
+#include "include/logger.hpp"
 
 using namespace dpp;
 
 
-int main() {
-	assert(Values.info.size() == Values.infoIDs.size());
-
+void startup() {
 	cluster bot(BOT_TOKEN);
-	std::ofstream O("C:/Users/User/Desktop/debug_hooker.txt", std::ofstream::out | std::ofstream::trunc);
-	O.close();
 
-	bot.on_log([](log_t const& log) {
-		using namespace std::chrono;
-
-		std::ofstream O("C:/Users/User/Desktop/debug_hooker.txt", std::ofstream::app);
-
-		char const* severity;
-		switch (log.severity) {
-			case loglevel::ll_debug:
-				severity = "DEBUG: ";
-				break;
-			case loglevel::ll_info:
-				severity = "INFO: ";
-				break;
-			case loglevel::ll_warning:
-				severity = "WARNING: ";
-				break;
-			case loglevel::ll_error:
-				severity = "ERROR: ";
-				break;
-			case loglevel::ll_critical:
-				severity = "CRITICAL: ";
-				break;
-			default:
-				return;
-		}
-
-		auto now_tt = system_clock::to_time_t(system_clock::now());
-		tm now_tm;
-		localtime_s(&now_tm, &now_tt);
-
-		auto fmt = "%a %b %d %I:%M:%S %p %Y";
-
-		O << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
-		O.close();
-		std::cout << '[' << std::put_time(&now_tm, fmt) << "] " << severity << log.message << '\n';
-
-		return;
-	});
+	utility::logger logger;
+	bot.on_log(logger);
 
 	bot.on_ready([&bot](ready_t const& event) {
 		if (run_once<struct CmdRegister>()) {
@@ -71,15 +31,14 @@ int main() {
 	});
 
 	bot.on_slashcommand([&bot](slashcommand_t const& event) -> task<void> {
-		auto hasher = std::hash<std::string>();
-		auto const commandNameHash = hasher(event.command.get_command_name());
+		auto const commandName = event.command.get_command_name();
 
-		if (commandNameHash == hasher("badge")) {
-			using namespace std::chrono;
+		if (commandName == "badge") {
+			namespace ch = std::chrono;
 
-			time_t restartDateTimeType = system_clock::to_time_t(
-				sys_days(
-					year_month_day(floor<std::chrono::days>(system_clock::now())) + months(1)
+			time_t restartDateTimeType = ch::system_clock::to_time_t(
+				ch::sys_days(
+					ch::year_month_day(floor<ch::days>(ch::system_clock::now())) + ch::months(1)
 				)
 			);
 			tm restartDateTM;
@@ -88,15 +47,15 @@ int main() {
 				std::string("Badge extended, next refresh needed until approximately `") + Values.months[restartDateTM.tm_mon] + " " + std::to_string(restartDateTM.tm_mday) + " " + std::to_string(1900 + restartDateTM.tm_year) + "`"
 			).set_flags(m_ephemeral));
 		}
-		else if (commandNameHash == hasher("rules-init")) {
+		else if (commandName == "rules-init") {
 			bot.message_create({ event.command.channel_id, Values.rules });
 			event.reply(message("Rules published.").set_flags(m_ephemeral));
-		} else if (commandNameHash == hasher("info-init")) {
+		} else if (commandName == "info-init") {
 			event.reply(message("Info published.").set_flags(m_ephemeral));
 			for (auto embed : Values.info)
 				co_await bot.co_message_create({ event.command.channel_id, embed });
-		} else if (commandNameHash == hasher("rules") || commandNameHash == hasher("info")) {
-			bool isRules = commandNameHash == hasher("rules");
+		} else if (commandName == "rules" || commandName == "info") {
+			bool isRules = commandName == "rules";
 			if (isRules ? event.command.channel.name == "server-info" : event.command.channel.name == "rules") {
 				co_await event.co_reply(message(std::string("Wrong channel; expected ") + (isRules ? "#rules" : "#server-info")).set_flags(m_ephemeral));
 				co_return;
@@ -117,6 +76,24 @@ int main() {
 	});
 
 	bot.start(dpp::st_wait);
+
+	return;
+}
+
+int main() {
+	assert(Values.info.size() == Values.infoIDs.size());
+
+	utility::logger::preinit("C:/Users/User/Desktop/debug_hooker");
+	size_t startupCount = 1;
+	utility::logger::logStartup(1);
+	while (true) {
+		try {
+			startup();
+		} catch (...) {
+			++startupCount;
+			utility::logger::logStartup(startupCount);
+		}
+	}
 
 	return 0;
 }
