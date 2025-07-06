@@ -4,12 +4,19 @@ project(Fryy_55scorner)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Release)
 
-include_directories(SYSTEM "D:/libs/D++ v10.1/include/dpp-10.1")
-link_directories("D:/libs/D++ v10.1/lib/dpp-10.1")
+include_directories(SYSTEM "D:/libs/D++ v10.1.2/include/dpp-10.1")
+link_directories("D:/libs/D++ v10.1.2/lib/dpp-10.1")
 
-add_executable(Fryy_55scorner
-    src/main.cpp
-    src/include/logger.cpp
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
+add_executable(${PROJECT_NAME} ${SOURCES})
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        ${SRC_DIR}
+        ${SRC_DIR}/data
+        ${SRC_DIR}/general-purpose
+        ${SRC_DIR}/utils
 )
-set_target_properties(Fryy_55scorner PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin$<0:>)
-target_link_libraries(Fryy_55scorner dpp)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin$<0:>)
+target_link_libraries(${PROJECT_NAME} dpp)
