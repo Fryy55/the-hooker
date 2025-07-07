@@ -12,7 +12,9 @@ public:
 	void badge();
 	dpp::task<void> init();
 	dpp::task<void> update();
+	dpp::task<void> release();
 
+	void requestFailed(dpp::http_request_completion_t const& request, std::size_t tag, bool ephemeral);
 	void noOptions(bool ephemeral);
 	void unknownCommand(bool ephemeral);
 	void unknownSubcommand(bool ephemeral);

@@ -54,50 +54,50 @@ namespace values {
 	inline constexpr auto rulesID = 1364603265769144512;
 
 	inline std::array const info {
-			dpp::embed()
-				.set_color(dpp::colors::purple_amethyst)
-				.set_title("Roles Information")
-				.set_description(
-					"Below are some of the main roles of the server.\n"
-				)
-				.add_field(
-					"Staff/Privileged Roles",
-					"<@&1351991165603545249> - People in charge of the whole server. Each gets a personalized role.\n"
-					"<@&1351991422550802533> - Trusted users who keep the server organized and safe.\n"
-					"<@&1351937107060326451> - Programmers that have access to special hidden chats for easier cooperative development.",
-					false
-				)
-				.add_field(
-					"Leveling Roles",
-					"<@&1351944696640962581> - reaching this level gives you the <@&1351904191194599544> role.\n"
-					"<@&1351944961830031412>\n"
-					"<@&1351945155883696221>",
-					false
-				),
-			dpp::embed()
-				.set_color(dpp::colors::purple_amethyst)
-				.set_title("Staff list")
-				.add_field(
-					":crown: Owners",
-					"Fryy_55 [she/her]",
-					true
-				)
-				.add_field(
-					":tools: Moderators",
-					"None",
-					true
-				),	
-			dpp::embed()
-				.set_color(dpp::colors::purple_amethyst)
-				.set_title("Extras")
-				.set_description(
-					":link: **Invite Link**\n"
-					"https://discord.com/invite/4vqtjfdhTk"
-				)
-				.set_footer(
-					dpp::embed_footer()
-						.set_text("yeah idk what to add here ¯\\_(ツ)_/¯")
-				)
+		dpp::embed()
+			.set_color(dpp::colors::purple_amethyst)
+			.set_title("Roles Information")
+			.set_description(
+				"Below are some of the main roles of the server.\n"
+			)
+			.add_field(
+				"Staff/Privileged Roles",
+				"<@&1351991165603545249> - People in charge of the whole server. Each gets a personalized role.\n"
+				"<@&1351991422550802533> - Trusted users who keep the server organized and safe.\n"
+				"<@&1351937107060326451> - Programmers that have access to special hidden chats for easier cooperative development.",
+				false
+			)
+			.add_field(
+				"Leveling Roles",
+				"<@&1351944696640962581> - reaching this level gives you the <@&1351904191194599544> role.\n"
+				"<@&1351944961830031412>\n"
+				"<@&1351945155883696221>",
+				false
+			),
+		dpp::embed()
+			.set_color(dpp::colors::purple_amethyst)
+			.set_title("Staff list")
+			.add_field(
+				":crown: Owners",
+				"Fryy_55 [she/her]",
+				true
+			)
+			.add_field(
+				":tools: Moderators",
+				"None",
+				true
+			),	
+		dpp::embed()
+			.set_color(dpp::colors::purple_amethyst)
+			.set_title("Extras")
+			.set_description(
+				":link: **Invite Link**\n"
+				"https://discord.com/invite/4vqtjfdhTk"
+			)
+			.set_footer(
+				dpp::embed_footer()
+					.set_text("yeah idk what to add here ¯\\_(ツ)_/¯")
+			)
 	};
 
 	inline constexpr std::array infoIDs = {
@@ -120,4 +120,6 @@ namespace values {
 		"Nov",
 		"Dec"
 	};
+
+	inline constexpr char const* userAgent = "Discord-Bot-The-Hooker";
 };
