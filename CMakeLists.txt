@@ -4,8 +4,8 @@ project(Fryy_55scorner)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BUILD_TYPE Release)
 
-include_directories(SYSTEM "D:/libs/D++ v10.1.2/include/dpp-10.1")
-link_directories("D:/libs/D++ v10.1.2/lib/dpp-10.1")
+include_directories(SYSTEM "D:/libs/D++ v10.1.3/include/dpp-10.1")
+link_directories("D:/libs/D++ v10.1.3/lib/dpp-10.1")
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
 add_executable(${PROJECT_NAME} ${SOURCES})
