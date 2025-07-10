@@ -85,11 +85,24 @@ task<void> Commands::release() {
 	OPTIONS_PRELUDE_CORO(m_event);
 
 	auto ownerRepo = std::get<std::string>(m_event->get_parameter("owner-repo"));
-	auto releaseReq = co_await m_bot.co_request(
+	auto tagPos = std::ranges::find_if(
+		options.begin(),
+		options.end(),
+		[](command_data_option const& option) { return option.name == "tag"; }
+	);
+	auto releaseURL = (tagPos == options.end()) ?
 		std::format(
 			"https://api.github.com/repos/{}/releases/latest",
 			ownerRepo
-		),
+		)
+		:
+		std::format(
+			"https://api.github.com/repos/{}/releases/tags/{}",
+			ownerRepo,
+			std::get<std::string>(tagPos->value)
+		);
+	auto releaseReq = co_await m_bot.co_request(
+		releaseURL,
 		m_get,
 		"", // postdata
 		"", // mimetype
@@ -110,6 +123,7 @@ task<void> Commands::release() {
 
 	auto release = nlohmann::json::parse(releaseReq.body);
 	std::string tag = release["tag_name"];
+	bool prerelease = release["prerelease"];
 
 	auto modjson = nlohmann::json::parse(modjsonReq.body);
 	std::string name = modjson["name"];
@@ -134,21 +148,26 @@ task<void> Commands::release() {
 	}
 
 	auto newRelease = std::get<bool>(m_event->get_parameter("new-release"));
+	std::uint32_t color;
+	if (prerelease)
+		color = colors::dark_yellow;
+	else
+		color = newRelease ? colors::cyan : colors::purple_amethyst;
 	auto releaseMessage = message(
 		m_event->command.channel_id,
 		std::get<bool>(m_event->get_parameter("ping")) ? "||<@&1351951492407627877>||" : ""
 	).add_embed(
 		embed()
-			.set_color(newRelease ? colors::cyan : colors::purple_amethyst)
+			.set_color(color)
 			.set_title(newRelease ? "New release!" : "New update!")
 			.set_description(
 				std::format(
-					"## {}{} {} by {}\n" // NEW emoji/name/version/authors
+					"## {}{} {} by {}\n{}" // NEW emoji/name/version/authors/prerelease
 					"### Changelog:\n"
 					"# {}\n" // Version
 					"{}\n" // Release body
 					"## [Download]({})", // Download URL
-					newRelease ? ":new: " : "", name, tag, devs,
+					newRelease ? ":new: " : "", name, tag, devs, prerelease ? values::prereleaseEmojis : "",
 					tag,
 					std::string(release["body"]),
 					std::string(release["assets"][0]["browser_download_url"])

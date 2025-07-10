@@ -122,4 +122,11 @@ namespace values {
 	};
 
 	inline constexpr char const* userAgent = "Discord-Bot-The-Hooker";
+
+	inline constexpr char const* prereleaseEmojis =
+		"<:prerelease0:1392939188600705104>"
+		"<:prerelease1:1392939198801252392>"
+		"<:prerelease2:1392939204853501962>"
+		"<:prerelease3:1392939211178639372>"
+		"<:prerelease4:1392939217746792458>\n";
 };

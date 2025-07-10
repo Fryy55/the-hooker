@@ -31,6 +31,7 @@ int main() {
 					.add_option({ co_boolean, "new-release", "Whether or not is this a new release", true })
 					.add_option({ co_boolean, "ping", "Whether or not to ping Mod Notifs", true })
 					.add_option({ co_string, "branch", "The repo's branch to retrieve mod.json and pack.png from (optional, defaults to main)" })
+					.add_option({ co_string, "tag", "Get the release by tag instead of fetching latest (optional)" })
 			};
 			for (auto& command : commandsVector)
 				command.set_interaction_contexts({itc_guild});
