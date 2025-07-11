@@ -6,6 +6,7 @@
 #include "check_for_channel.hpp"
 #include "options_macros.hpp"
 #include "requests_macros.hpp"
+#include "enums.hpp"
 
 using namespace dpp;
 
@@ -147,28 +148,63 @@ task<void> Commands::release() {
 		}
 	}
 
-	auto newRelease = std::get<bool>(m_event->get_parameter("new-release"));
+	auto releaseTypeString = std::get<std::string>(m_event->get_parameter("release-type"));
+	ReleaseType releaseType;
+	if (releaseTypeString == "new")
+		releaseType = ReleaseType::NEW;
+	else if (releaseTypeString == "full")
+		releaseType = ReleaseType::FULL;
+	else
+		releaseType = ReleaseType::UPDATE;
 	std::uint32_t color;
+	std::string_view title;
+	std::string_view emoji;
+	switch (releaseType) {
+		case ReleaseType::NEW:
+			color = colors::cyan;
+			title = "New release!";
+			emoji = ":new: ";
+			break;
+
+		case ReleaseType::FULL:
+			if (prerelease) {
+				m_event->edit_original_response(
+					message("A full release can't be a prerelease!").set_flags(m_ephemeral)
+				);
+				co_return;
+			}
+
+			color = colors::pale_green;
+			title = "Full release!";
+			emoji = ":white_check_mark: ";
+			break;
+
+		case ReleaseType::UPDATE:
+			color = colors::purple_amethyst;
+			title = "New update!";
+			break;
+
+		default:
+			throw "Unknown color";
+	}
 	if (prerelease)
 		color = colors::dark_yellow;
-	else
-		color = newRelease ? colors::cyan : colors::purple_amethyst;
 	auto releaseMessage = message(
 		m_event->command.channel_id,
 		std::get<bool>(m_event->get_parameter("ping")) ? "||<@&1351951492407627877>||" : ""
 	).add_embed(
 		embed()
 			.set_color(color)
-			.set_title(newRelease ? "New release!" : "New update!")
+			.set_title(title)
 			.set_description(
 				std::format(
-					"## {}{} {} by {}\n{}" // NEW emoji/name/version/authors/prerelease
+					"## {}{} {} by {}\n{}" // Status emoji/name/version/authors/prerelease
 					"### Changelog:\n"
 					"# {}\n" // Version
 					"{}\n" // Release body
 					"## [Download]({})", // Download URL
-					newRelease ? ":new: " : "", name, tag, devs, prerelease ? values::prereleaseEmojis : "",
-					tag,
+					emoji, name, tag, devs, prerelease ? values::prereleaseEmojis : "",
+					std::move(tag),
 					std::string(release["body"]),
 					std::string(release["assets"][0]["browser_download_url"])
 				)

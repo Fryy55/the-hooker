@@ -28,7 +28,12 @@ int main() {
 					.add_option({ co_sub_command, "info", "Updates server info" }),
 				slashcommand("release", "Posts a mod release/update log", bot.me.id)
 					.add_option({ co_string, "owner-repo", "Owner's account name and repo's name for the mod in the format OWNER/REPO", true })
-					.add_option({ co_boolean, "new-release", "Whether or not is this a new release", true })
+					.add_option(
+						command_option(co_string, "release-type", "Type of this release", true)
+							.add_choice({ "New release", "new" })
+							.add_choice({ "Full release", "full" })
+							.add_choice({ "New update", "update" })
+					)
 					.add_option({ co_boolean, "ping", "Whether or not to ping Mod Notifs", true })
 					.add_option({ co_string, "branch", "The repo's branch to retrieve mod.json and pack.png from (optional, defaults to main)" })
 					.add_option({ co_string, "tag", "Get the release by tag instead of fetching latest (optional)" })
